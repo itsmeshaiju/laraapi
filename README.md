@@ -1,3 +1,5 @@
+https://www.youtube.com/watch?v=MT-GJQIY3EU&t=95s
+
 REST API from scratch using Laravel 8. We will implement authentication using API keys with Laravel Sanctum.
 
 
