@@ -24,7 +24,6 @@ class AuthController extends Controller
         ]);
 
         $token = $user->createToken('myapptoken')->plainTextToken;
-
         $resonse = [
             'user'=>$user,
             'token'=>$token
@@ -32,14 +31,37 @@ class AuthController extends Controller
         return response($resonse,201);
     }
 
-    // public function login(Request $request){
-    //     $fields = $request->validate([
-    //         'name'=>'required|string',
-    //         'password'=>'required|string'
-    //     ]);
+    public function logout(Request $request){
+        auth()->user()->tokens()->delete();
 
-    //     if(User::auth($fields)){
+        return [
+            'message'=>'logged out'
+        ];
 
-    //     }
-    // }
+    }
+
+    public function login(Request $request){
+        $fields = $request->validate([
+            'email'=>'required|string',
+            'password'=>'required|string'
+        ]);
+
+        //check email
+        $user = User::Where('email',$fields['email'])->first();
+       // echo $user->password;
+        //check password
+        if(!$user || ! Hash::check($fields['password'],$user->password)){
+
+            return response([
+                'message'=> 'Bad Credentials'
+            ],401);
+        }
+
+        $token = $user->createToken('myapptoken')->plainTextToken;
+        $resonse = [
+            'user'=>$user,
+            'token'=>$token
+        ];
+        return response($resonse,201);
+    }
 }
